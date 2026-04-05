@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.22">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.22" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.22">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeeTimeTracking_API.DTOs\EmployeeTimeTracking_API.DTOs.csproj" />
+    <ProjectReference Include="..\EmployeeTimeTracking_API.IRepository\EmployeeTimeTracking_API.IRepository.csproj" />
+    <ProjectReference Include="..\EmployeeTimeTracking_API.IService\EmployeeTimeTracking_API.IService.csproj" />
+    <ProjectReference Include="..\EmployeeTimeTracking_API.Model\EmployeeTimeTracking_API.Model.csproj" />
+    <ProjectReference Include="..\EmployeeTimeTracking_API.Repository\EmployeeTimeTracking_API.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

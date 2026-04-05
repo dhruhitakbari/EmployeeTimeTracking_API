@@ -1,0 +1,77 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeTimeTracking_API", "EmployeeTimeTracking_API\EmployeeTimeTracking_API.csproj", "{A0471A05-6A34-426D-80BE-573CB6E92BE3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{B1E8874A-730F-40A9-BCC5-F9AC6F35C7B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeTimeTracking_API.Model", "EmployeeTimeTracking_API.Model\EmployeeTimeTracking_API.Model.csproj", "{2C5B1EAA-C5BB-4375-8ADF-FC964821F379}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{31BDDDED-19CA-465F-AA02-9DF4BE363298}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository", "Repository", "{23A0AB16-3584-4942-8637-C3AFFFFE1C07}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeTimeTracking_API.IRepository", "EmployeeTimeTracking_API.IRepository\EmployeeTimeTracking_API.IRepository.csproj", "{864E0D5A-A003-4C0E-9D14-D07CE961AE11}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeTimeTracking_API.Repository", "EmployeeTimeTracking_API.Repository\EmployeeTimeTracking_API.Repository.csproj", "{958AFAA4-A224-43CC-A5B7-B12A7045A067}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeTimeTracking_API.IService", "EmployeeTimeTracking_API.IService\EmployeeTimeTracking_API.IService.csproj", "{87B5F873-6302-4FD2-8310-9AC1D9C0A74B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeTimeTracking_API.Service", "EmployeeTimeTracking_API.Service\EmployeeTimeTracking_API.Service.csproj", "{1BDBA6D4-7AC6-4B1A-B29F-489D0AB530F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DTOs", "DTOs", "{B123A124-770E-4845-9954-0778835981D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeTimeTracking_API.DTOs", "EmployeeTimeTracking_API.DTOs\EmployeeTimeTracking_API.DTOs.csproj", "{862291ED-77BE-4540-8B68-4DA60E05D80C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0471A05-6A34-426D-80BE-573CB6E92BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0471A05-6A34-426D-80BE-573CB6E92BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0471A05-6A34-426D-80BE-573CB6E92BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0471A05-6A34-426D-80BE-573CB6E92BE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C5B1EAA-C5BB-4375-8ADF-FC964821F379}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C5B1EAA-C5BB-4375-8ADF-FC964821F379}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C5B1EAA-C5BB-4375-8ADF-FC964821F379}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5B1EAA-C5BB-4375-8ADF-FC964821F379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{864E0D5A-A003-4C0E-9D14-D07CE961AE11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{864E0D5A-A003-4C0E-9D14-D07CE961AE11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{864E0D5A-A003-4C0E-9D14-D07CE961AE11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{864E0D5A-A003-4C0E-9D14-D07CE961AE11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{958AFAA4-A224-43CC-A5B7-B12A7045A067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{958AFAA4-A224-43CC-A5B7-B12A7045A067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{958AFAA4-A224-43CC-A5B7-B12A7045A067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{958AFAA4-A224-43CC-A5B7-B12A7045A067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87B5F873-6302-4FD2-8310-9AC1D9C0A74B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87B5F873-6302-4FD2-8310-9AC1D9C0A74B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87B5F873-6302-4FD2-8310-9AC1D9C0A74B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87B5F873-6302-4FD2-8310-9AC1D9C0A74B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BDBA6D4-7AC6-4B1A-B29F-489D0AB530F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BDBA6D4-7AC6-4B1A-B29F-489D0AB530F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BDBA6D4-7AC6-4B1A-B29F-489D0AB530F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BDBA6D4-7AC6-4B1A-B29F-489D0AB530F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{862291ED-77BE-4540-8B68-4DA60E05D80C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862291ED-77BE-4540-8B68-4DA60E05D80C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862291ED-77BE-4540-8B68-4DA60E05D80C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862291ED-77BE-4540-8B68-4DA60E05D80C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2C5B1EAA-C5BB-4375-8ADF-FC964821F379} = {B1E8874A-730F-40A9-BCC5-F9AC6F35C7B7}
+		{864E0D5A-A003-4C0E-9D14-D07CE961AE11} = {23A0AB16-3584-4942-8637-C3AFFFFE1C07}
+		{958AFAA4-A224-43CC-A5B7-B12A7045A067} = {23A0AB16-3584-4942-8637-C3AFFFFE1C07}
+		{87B5F873-6302-4FD2-8310-9AC1D9C0A74B} = {31BDDDED-19CA-465F-AA02-9DF4BE363298}
+		{1BDBA6D4-7AC6-4B1A-B29F-489D0AB530F2} = {31BDDDED-19CA-465F-AA02-9DF4BE363298}
+		{862291ED-77BE-4540-8B68-4DA60E05D80C} = {B123A124-770E-4845-9954-0778835981D6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {95333607-CFB4-4532-91DB-2C7B448399D8}
+	EndGlobalSection
+EndGlobal
