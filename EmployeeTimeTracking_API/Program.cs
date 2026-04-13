@@ -1,5 +1,4 @@
-﻿
-using EmployeeTimeTracking_API.IService;
+﻿using EmployeeTimeTracking_API.IService;
 using EmployeeTimeTracking_API.Repository;
 using EmployeeTimeTracking_API.Repository.Data;
 using EmployeeTimeTracking_API.Service;
@@ -17,22 +16,94 @@ namespace EmployeeTimeTracking_API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // ✅ Swagger with JWT config
+            // ──────────────────────────────────────────
+            // 1. READ JWT SETTINGS
+            // ──────────────────────────────────────────
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            var secretKey = jwtSettings["Key"];
+            var issuer = jwtSettings["Issuer"];
+            var audience = jwtSettings["Audience"];
+
+            // ──────────────────────────────────────────
+            // 2. AUTHENTICATION — JWT SETUP
+            // ──────────────────────────────────────────
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                // ⭐ KEY LINE — stops .NET from renaming your claims
+                options.MapInboundClaims = false;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = issuer,
+
+                    ValidateAudience = true,
+                    ValidAudience = audience,
+
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                                                   Encoding.UTF8.GetBytes(secretKey)),
+
+                    // ⭐ KEY LINE — tells .NET which claim is the role
+                    RoleClaimType = "role"
+                };
+
+                // Debug events — remove these after everything works
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        System.Diagnostics.Debug.WriteLine("❌ AUTH FAILED: " + context.Exception.Message);
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        System.Diagnostics.Debug.WriteLine("✅ TOKEN VALIDATED");
+                        foreach (var claim in context.Principal.Claims)
+                            System.Diagnostics.Debug.WriteLine($"   ➤ {claim.Type} : {claim.Value}");
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        System.Diagnostics.Debug.WriteLine("🚫 CHALLENGE (401) - " + context.ErrorDescription);
+                        return Task.CompletedTask;
+                    },
+                    OnForbidden = context =>
+                    {
+                        System.Diagnostics.Debug.WriteLine("🚫 FORBIDDEN (403)");
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
+            // ──────────────────────────────────────────
+            // 3. AUTHORIZATION
+            // ──────────────────────────────────────────
+            builder.Services.AddAuthorization();
+
+            // ──────────────────────────────────────────
+            // 4. SWAGGER WITH JWT SUPPORT
+            // ──────────────────────────────────────────
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-
-                // 🔑 Add JWT support
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Employee Tracker API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
+                    Type = SecuritySchemeType.Http,   // ← Http (not ApiKey)
+                    Scheme = "bearer",                  // ← lowercase
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' [space] and then your token.\n\nExample: \"Bearer 12345abcdef\""
+                    Description = "Enter your token here (without Bearer prefix)"
                 });
-
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -41,7 +112,7 @@ namespace EmployeeTimeTracking_API
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
+                                Id   = "Bearer"
                             }
                         },
                         new string[] {}
@@ -49,93 +120,35 @@ namespace EmployeeTimeTracking_API
                 });
             });
 
-
-            // --- 1. Get JWT Settings from appsettings.json ---
-            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-
-            // --- 2. Add Authentication Services ---
-            builder.Services.AddAuthentication(options =>
-            {
-                // This sets the default schemes.
-                // When you use [Authorize], it will use this.
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        Console.WriteLine("❌ AUTH FAILED: " + context.Exception.Message);
-                        return Task.CompletedTask;
-                    },
-                    OnTokenValidated = context =>
-                    {
-                        Console.WriteLine("✅ TOKEN VALIDATED");
-                        return Task.CompletedTask;
-                    }
-                };
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    // --- These 5 settings are the most important ---
-
-                    // 1. Validate the Issuer (who created the token)
-                    ValidateIssuer = true,
-                    ValidIssuer = jwtSettings["Issuer"],
-
-                    // 2. Validate the Audience (who the token is for)
-                    ValidateAudience = true,
-                    ValidAudience = jwtSettings["Audience"],
-
-                    // 3. Validate the Lifetime (check if it's expired)
-                    ValidateLifetime = true,
-
-                    // 4. Validate the Signing Key (the secret key)
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"])),
-
-                    // ⭐ ADD THIS LINE (VERY IMPORTANT)
-                    RoleClaimType = "role",
-
-                    // 5. Clock Skew (optional, good for servers not in sync)
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
-            builder.Services.AddAuthorization();
-
-            // Add services to the container.
-
+            // ──────────────────────────────────────────
+            // 5. OTHER SERVICES
+            // ──────────────────────────────────────────
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
-            #region Service and Repository Registration
             builder.Services.AddRepository();
             builder.Services.AddServices();
-            #endregion
 
-            #region // Register AutoMapper
-            // This scans your assemblies to find the "MappingProfile" class automatically
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            #endregion
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
-                    policy => policy.AllowAnyOrigin()
-                                    .AllowAnyMethod()
-                                    .AllowAnyHeader());
+                options.AddPolicy("AllowAngular", policy =>
+                    policy.WithOrigins("http://localhost:4200")  // ← your Angular URL
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
             });
 
+            // ──────────────────────────────────────────
+            // 6. MIDDLEWARE PIPELINE (ORDER MATTERS!)
+            // ──────────────────────────────────────────
             var app = builder.Build();
 
-            app.UseCors("AllowAll");
+            app.UseCors("AllowAngular");   // ← must be FIRST
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -143,12 +156,10 @@ namespace EmployeeTimeTracking_API
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
-
+            app.UseAuthentication();       // ← must be BEFORE Authorization
+            app.UseAuthorization();        // ← must be AFTER Authentication
 
             app.MapControllers();
-
             app.Run();
         }
     }

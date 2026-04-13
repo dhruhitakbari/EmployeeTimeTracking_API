@@ -131,29 +131,26 @@ namespace EmployeeTimeTracking_API.Service
         private string GenerateToken(User user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+
+            var key = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-
-                // Required for backend role-based authorization
-                new Claim(ClaimTypes.Role, user.Role.Name),
-
-                // Optional but useful for frontend checks
-                new Claim("role", user.Role.Name),
-
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim("sub",   user.UserId.ToString()),
+                new Claim("email", user.Email),
+                new Claim("role",  user.Role.Name),     // ⭐ ONLY "role" — no ClaimTypes.Role
+                new Claim("name",  $"{user.FirstName} {user.LastName}"),
+                new Claim("jti",   Guid.NewGuid().ToString())
             };
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(8),
+                expires: DateTime.UtcNow.AddHours(
+                                       double.Parse(jwtSettings["ExpiryHours"])),
                 signingCredentials: creds
             );
 

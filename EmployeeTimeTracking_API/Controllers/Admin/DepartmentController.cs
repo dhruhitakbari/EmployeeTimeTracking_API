@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeTimeTracking_API.Controllers
 {
-    [Authorize(Roles = "Admin")]
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;
