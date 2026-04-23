@@ -15,6 +15,8 @@ namespace EmployeeTimeTracking_API.Service.Profiles
 
             // 2. Map from Create DTO -> Database Entity (Add/Update)
             CreateMap<CreateDepartmentDto, Department>();
+
+            CreateMap<DepartmentDto, Department>();
         }
     }
 }
